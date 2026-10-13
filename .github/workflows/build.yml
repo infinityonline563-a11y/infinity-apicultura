@@ -37,6 +37,15 @@ jobs:
           echo "USER=runner" >> $GITHUB_ENV
           sudo chown -R $USER:$USER $GITHUB_WORKSPACE
 
+      - name: Accept Android SDK Licenses automatically
+        run: |
+          mkdir -p /home/runner/.android
+          touch /home/runner/.android/repositories.cfg
+          export ANDROID_HOME="/home/runner/.buildozer/android/platform/android-sdk"
+          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/tools/bin
+          # Forzar la aceptación si las herramientas ya están descargadas
+          yes | sdkmanager --licenses || true
+
       - name: Run Buildozer Build
         env:
           HOME: /home/runner
