@@ -1,4 +1,4 @@
-Name: Compilar APK Apícola
+name: Compilar APK Apícola
 
 on:
   push:
