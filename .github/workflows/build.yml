@@ -1,12 +1,15 @@
+
 name: Compilar APK Apícola
 
 on:
   push:
     branches: [ main, principal ]
+  workflow_dispatch:   # <--- ¡AGREGA ESTA LÍNEA AQUÍ!
 
 jobs:
   build:
     runs-on: ubuntu-22.04
+    # (el resto de tu código sigue exactamente igual...)
 
     steps:
       - name: Checkout code
