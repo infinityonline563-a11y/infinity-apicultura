@@ -1,15 +1,13 @@
-
-name: Compilar APK Apícola
+Name: Compilar APK Apícola
 
 on:
   push:
     branches: [ main, principal ]
-  workflow_dispatch:   # <--- ¡AGREGA ESTA LÍNEA AQUÍ!
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-22.04
-    # (el resto de tu código sigue exactamente igual...)
 
     steps:
       - name: Checkout code
@@ -31,10 +29,17 @@ jobs:
 
       - name: Install Buildozer and Cython
         run: |
-          pip install --upgrade pip
-          pip install Cython==0.29.36 buildozer
+          python -m pip install --upgrade pip
+          pip install --upgrade Cython==0.29.36 buildozer
+
+      - name: Fix permissions and environment
+        run: |
+          echo "USER=runner" >> $GITHUB_ENV
+          sudo chown -R $USER:$USER $GITHUB_WORKSPACE
 
       - name: Run Buildozer Build
+        env:
+          HOME: /home/runner
         run: |
           buildozer -v android debug
 
