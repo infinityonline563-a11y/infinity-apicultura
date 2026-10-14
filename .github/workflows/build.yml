@@ -32,16 +32,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade Cython==0.29.36 buildozer
 
-      - name: Configure User Environment
+      - name: Configure User Environment & Accept Licenses
         run: |
           echo "USER=runner" >> $GITHUB_ENV
           sudo chown -R $USER:$USER $GITHUB_WORKSPACE
+          mkdir -p /home/runner/.android
+          touch /home/runner/.android/repositories.cfg
 
-      - name: Run Buildozer Build with Auto-Accept Licenses
+      - name: Run Buildozer Build
         env:
           HOME: /home/runner
         run: |
-          yes | buildozer -v android debug
+          buildozer -v android debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
