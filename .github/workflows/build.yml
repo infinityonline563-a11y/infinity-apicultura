@@ -18,39 +18,11 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install system dependencies
-        run: |
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-          sudo apt-get install -y \
-              git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config \
-              zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev \
-              libssl-dev gettext build-essential ccache libltdl-dev
-
-      - name: Install Buildozer and Cython
-        run: |
-          python -m pip install --upgrade pip
-          pip install --upgrade Cython==0.29.36 buildozer
-
-      - name: Fix permissions and environment
-        run: |
-          echo "USER=runner" >> $GITHUB_ENV
-          sudo chown -R $USER:$USER $GITHUB_WORKSPACE
-
-      - name: Accept Android SDK Licenses automatically
-        run: |
-          mkdir -p /home/runner/.android
-          touch /home/runner/.android/repositories.cfg
-          export ANDROID_HOME="/home/runner/.buildozer/android/platform/android-sdk"
-          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/tools/bin
-          # Forzar la aceptación si las herramientas ya están descargadas
-          yes | sdkmanager --licenses || true
-
-      - name: Run Buildozer Build
-        env:
-          HOME: /home/runner
-        run: |
-          buildozer -v android debug
+      - name: Build with Buildozer
+        uses: kivy/buildozer-action@v1
+        with:
+          filename: buildozer.spec
+          command: android debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
