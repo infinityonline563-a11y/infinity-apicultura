@@ -37,11 +37,11 @@ jobs:
           echo "USER=runner" >> $GITHUB_ENV
           sudo chown -R $USER:$USER $GITHUB_WORKSPACE
 
-      - name: Run Buildozer Build
+      - name: Run Buildozer Build with Auto-Accept Licenses
         env:
           HOME: /home/runner
         run: |
-          buildozer -v android debug
+          yes | buildozer -v android debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
